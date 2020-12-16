@@ -1,7 +1,8 @@
 package com.lsurvila.habic
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lsurvila.habic.databinding.ActivityMainBinding
 
@@ -15,7 +16,10 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.habicListView.layoutManager = LinearLayoutManager(this)
-        binding.habicListView.adapter = HabicAdapter(arrayOf("Gym", "Emails", "Work", "Study"))
+        val model: HabicViewModel by viewModels()
+        model.getTodoItems().observe(this, { todoItems ->
+            binding.habicListView.layoutManager = LinearLayoutManager(this)
+            binding.habicListView.adapter = HabicAdapter(todoItems)
+        })
     }
 }

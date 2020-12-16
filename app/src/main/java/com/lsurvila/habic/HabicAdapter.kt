@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class HabicAdapter(private val dataSet: Array<String>) : RecyclerView.Adapter<HabicAdapter.ViewHolder>() {
+class HabicAdapter(private val dataSet: List<String>) : RecyclerView.Adapter<HabicAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val itemTextView: TextView = view.findViewById(R.id.itemTextView)
