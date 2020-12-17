@@ -21,5 +21,9 @@ class MainActivity : AppCompatActivity() {
             binding.habicListView.layoutManager = LinearLayoutManager(this)
             binding.habicListView.adapter = HabicAdapter(todoItems)
         })
+
+        binding.addTaskButton.setOnClickListener {
+            model.addNewTodoItem("New Task")
+        }
     }
 }
