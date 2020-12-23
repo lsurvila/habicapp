@@ -15,15 +15,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        binding.habicListView.layoutManager = LinearLayoutManager(this)
+        val adapter = HabicAdapter()
+        binding.habicListView.adapter = adapter
 
-        val model: HabicViewModel by viewModels()
-        model.getTodoItems().observe(this, { todoItems ->
-            binding.habicListView.layoutManager = LinearLayoutManager(this)
-            binding.habicListView.adapter = HabicAdapter(todoItems)
+        val database by lazy { HabicDatabase.getDatabase(this) }
+        val repository by lazy { TodoItemRepository(database.todoItemDao()) }
+        val model: HabicViewModel by viewModels {
+            HabicViewModelFactory(repository)
+        }
+
+        model.allTodoItems.observe(this, { todoItems ->
+            adapter.submitList(todoItems)
         })
 
         binding.addTaskButton.setOnClickListener {
-            model.addNewTodoItem("New Task")
+            model.insert(TodoItemEntity(0, "New Task"))
         }
     }
 }

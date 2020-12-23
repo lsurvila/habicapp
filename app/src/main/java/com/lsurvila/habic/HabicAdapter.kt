@@ -4,9 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class HabicAdapter(private val dataSet: List<String>) : RecyclerView.Adapter<HabicAdapter.ViewHolder>() {
+class HabicAdapter : ListAdapter<TodoItemEntity, HabicAdapter.ViewHolder>(TODO_ITEMS_COMPARATOR) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val itemTextView: TextView = view.findViewById(R.id.itemTextView)
@@ -18,8 +20,18 @@ class HabicAdapter(private val dataSet: List<String>) : RecyclerView.Adapter<Hab
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemTextView.text = dataSet[position]
+        holder.itemTextView.text = getItem(position).todoItem
     }
 
-    override fun getItemCount(): Int = dataSet.size
+    companion object {
+        private val TODO_ITEMS_COMPARATOR = object : DiffUtil.ItemCallback<TodoItemEntity>() {
+            override fun areItemsTheSame(oldItem: TodoItemEntity, newItem: TodoItemEntity): Boolean {
+                return oldItem === newItem
+            }
+
+            override fun areContentsTheSame(oldItem: TodoItemEntity, newItem: TodoItemEntity): Boolean {
+                return oldItem.todoItem == newItem.todoItem
+            }
+        }
+    }
 }

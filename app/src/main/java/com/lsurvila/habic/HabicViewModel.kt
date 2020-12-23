@@ -1,21 +1,23 @@
 package com.lsurvila.habic
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.launch
 
-class HabicViewModel : ViewModel() {
+class HabicViewModel(private val repository: TodoItemRepository) : ViewModel() {
 
-    private val todoItems = arrayListOf("Gym", "Emails", "Work", "Study")
-    private val todoItemsLiveData = MutableLiveData<List<String>>()
+    val allTodoItems: LiveData<List<TodoItemEntity>> = repository.allTodoItems.asLiveData()
 
-    fun getTodoItems(): LiveData<List<String>> {
-        todoItemsLiveData.postValue(todoItems)
-        return todoItemsLiveData
+    fun insert(todoItem: TodoItemEntity) = viewModelScope.launch {
+        repository.insert(todoItem)
     }
+}
 
-    fun addNewTodoItem(newTodoItem: String) {
-        todoItems.add(newTodoItem)
-        todoItemsLiveData.postValue(todoItems)
+class HabicViewModelFactory(private val repository: TodoItemRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(HabicViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return HabicViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
