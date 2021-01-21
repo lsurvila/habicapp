@@ -1,6 +1,7 @@
 buildscript {
     ext.gradle_version = "4.1.1"
     ext.kotlin_version = "1.4.21"
+    ext.koin_version = "2.2.2"
     repositories {
         google()
         jcenter()
@@ -8,6 +9,7 @@ buildscript {
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.koin:koin-gradle-plugin:$koin_version"
     }
 }
 
